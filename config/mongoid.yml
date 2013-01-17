@@ -1,18 +1,9 @@
-defaults: &defaults
-  host: localhost
-
 development:
-  <<: *defaults
-  database: mongoid_dev
+  sessions:
+    default:
+      database: mongoid_dev
+      hosts: 
+        - localhost:27017
+  options:
+    #raise_not_found_error: false
 
-test:
-  <<: *defaults
-  database: mongoid_test
-
-# set these environment variables on your prod server
-production:
-  host: <%= ENV['MONGOID_HOST'] %>
-  port: <%= ENV['MONGOID_PORT'] %>
-  username: <%= ENV['MONGOID_USERNAME'] %>
-  password: <%= ENV['MONGOID_PASSWORD'] %>
-  database: <%= ENV['MONGOID_DATABASE'] %>

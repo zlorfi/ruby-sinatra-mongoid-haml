@@ -2,20 +2,17 @@ require 'rubygems'
 require 'sinatra/base'
 require 'haml'
 require 'mongoid'
-require 'models/blog_model'
+require './models/blog_model'
 
 class Blogger < Sinatra::Base
   # directory path settings relative to app file
   set :root, File.join(File.dirname(__FILE__), '..')
-  set :public, Proc.new { File.join(root, 'public') }
+  set :public_folder, Proc.new { File.join(root, 'public') }
   set :method_override, true
+  set :views, File.dirname(__FILE__) + "/views"
   
   configure do
-     Mongoid.configure do |config|
-      name = "mongoid_dev"
-      host = "localhost"
-      config.master = Mongo::Connection.new.db(name)
-    end
+    Mongoid.load!('./config/mongoid.yml', :development)
   end
   
   def initialize
@@ -29,18 +26,18 @@ class Blogger < Sinatra::Base
   # list all blogs
   get '/blogs' do
     @docs = Blog_model.all()
-    haml :'blog/index', :locals => { :title => "My Blog Lists", :blogs => @docs }
+    haml :"blog/index", :locals => { :title => "My Blog Lists", :blogs => @docs }
   end
   
   #view a blog
   get '/show.:id' do |id|
     @doc = Blog_model.find(id)
-    haml :'blog/show', :locals => { :title => "Blog", :blog => @doc}
+    haml :"blog/show", :locals => { :title => "Blog", :blog => @doc}
   end  
   
   # write new blog
   get '/new' do
-    haml :'blog/new', :locals => { :title => "New Blog"}
+    haml :"blog/new", :locals => { :title => "New Blog"}
   end  
   
   post '/new' do
@@ -53,14 +50,14 @@ class Blogger < Sinatra::Base
       redirect '/blogs'
     else
       puts "Error(s): ", @doc.errors.map {|k,v| "#{k}: #{v}"}
-      haml :'blog/error', :locals => { :errs => @doc.errors } 
+      haml :"blog/error", :locals => { :errs => @doc.errors } 
     end
   end
   
   #edit blog
   get '/edit.:id' do |id|
     @doc = Blog_model.find(id)
-    haml :'blog/edit', :locals => { :title => "Edit Blog", :blog => @doc}
+    haml :"blog/edit", :locals => { :title => "Edit Blog", :blog => @doc}
   end
   
   put '/edit.:id' do |id|
@@ -78,4 +75,3 @@ class Blogger < Sinatra::Base
   end
 end
 
-      

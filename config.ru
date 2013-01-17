@@ -1,3 +1,3 @@
-require 'controllers/blog'
+require './blog'
 
 run Blogger
