@@ -8,6 +8,8 @@
       %a(href='/show.#{blog._id}') #{blog.title}
     #blog_body
       =blog.body
+      %br/
+      #blog_date=blog.updated_at
 
     %a(href='/edit.#{blog._id}') Edit
     &nbsp;

@@ -1,3 +1,3 @@
 require './blog'
 
-run Blogger
+run Sinatra::Application
