@@ -4,20 +4,9 @@ require 'haml'
 require 'mongoid'
 require './models/blog_model'
 
-# directory path settings relative to app file
-#set :root, File.dirname(__FILE__)
-##set :root, File.join(File.dirname(__FILE__), '..')
-#set :public_folder, Proc.new { File.join(root, 'public') }
-#set :method_override, true
-#set :views, File.dirname(__FILE__) + "/views"
-
 configure do
   Mongoid.load!('./config/mongoid.yml', :development)
 end
-
-#def initialize
-#  super
-#end
 
 get '/' do
   redirect '/blogs'
@@ -63,7 +52,6 @@ end
 put '/edit.:id' do |id|
   @doc = Blog_model.find(id)
   @doc.update_attributes(params[:blog])
-  @doc.update_attributes({:modified_at => Time.now})
   redirect '/show.'+id
 end
 
